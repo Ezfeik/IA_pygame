@@ -100,8 +100,8 @@ def generate(width, height, verbose=True):
   return lines
 
 def maze_generator():
-  width = 20
-  height = 20
+  width = 200
+  height = 100
 
   args = sys.argv[1:]
   if len(args) >= 1:
