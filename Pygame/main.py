@@ -4,10 +4,7 @@ from maze_example import maze_generator
 #initialize pygame
 pygame.init()
 
-WIDTH = 420
-HEIGHT = 420
-
-SIZE_BLOCK = 20
+SIZE_BLOCK = 4
 
 WIDTH = 420
 HEIGHT = 420
@@ -35,7 +32,7 @@ class Player(object):
 
     def move(self, temp_pos, maze):
         self.position = temp_pos
-        maze.historial.append(temp_pos)
+        maze.record.append(temp_pos)
         print(f"current player position: {self.position}")
 
 
@@ -44,7 +41,7 @@ class Maze():
     def __init__(self):
         self.spaces = []
         self.queue = []
-        self.historial = []
+        self.record = []
         self.end = []
 
     def left_pop(self):
@@ -53,12 +50,12 @@ class Maze():
     def get_spaces(self):
         return self.spaces
 
-    def get_historial(self):
-        return self.historial
+    def get_record(self):
+        return self.record
 
     def can_move(self, player, move):
         temp_pos = (player.position[0]+move[0], player.position[1]+move[1])
-        if (temp_pos in self.spaces) and not (temp_pos in self.historial):
+        if (temp_pos in self.spaces) and not (temp_pos in self.record):
             return temp_pos
 
     def finished(self, pos):
@@ -120,7 +117,7 @@ if __name__ == '__main__':
             elif maze_map[f][c] == "I":
                 player = Player((f,c))
                 print(f"start position: {player.get_position()}")
-                maze.historial.append((f,c))
+                maze.record.append((f,c))
                 maze.spaces.append((f,c))
 
     maze.draw(screen, maze_map)
@@ -152,6 +149,6 @@ if __name__ == '__main__':
 
         player.move(maze.left_pop(), maze)
         player.draw(screen)
-        clock.tick(30)
+        clock.tick(2)
 
         pygame.display.update()
