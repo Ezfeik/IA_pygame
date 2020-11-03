@@ -1,4 +1,5 @@
 import sys, pygame
+from node import Node
 from maze_example import maze_generator
 
 #initialize pygame

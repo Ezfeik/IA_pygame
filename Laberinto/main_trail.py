@@ -7,9 +7,9 @@ from maze_example import maze_generator
 pygame.init()
 sys.setrecursionlimit(100000)
 
-FPS = 60
+FPS = 120
 
-SIZE_BLOCK = 7
+SIZE_BLOCK = 10
 
 WIDTH = None
 HEIGHT = None
@@ -18,7 +18,7 @@ YELLOW = (251, 255, 65)
 GREEN = (96, 189, 4)
 BLUE = (0, 195, 255)
 RED = (201, 0, 0)
-MORADO = (216, 26, 240)
+PURPLE = (216, 26, 240)
 
 UP = (-1,0)
 DOWN = (1,0)
@@ -56,26 +56,26 @@ class Node(object):
         return self.prev
 
 
-    def go_back_to(self, c, aux_list):
+    def go_back_to(self, c, cc_returning_list):
 
-        if self == c:
-            aux_list.append(self)
-            print(f"Returned to {self.get_position()}")
+        if self.prev == c:
+            cc_returning_list.append(self.prev)
+            print(f"Returned to {self.prev.get_position()}")
             return None
         else:
-            aux_list.append(self)
-            self.get_prev().go_back_to(c, aux_list)
+            cc_returning_list.append(self.prev)
+            self.get_prev().go_back_to(c, cc_returning_list)
 
 
-    def get_solution(self, initial, aux_list):
+    def get_solution(self, initial, cc_returning_list):
 
         if self == initial:
-            aux_list.append(self)
+            cc_returning_list.append(self)
             print(f"Returned to {self.get_position()}")
             return None
         else:
-            aux_list.append(self)
-            self.get_prev().get_solution(initial, aux_list)
+            cc_returning_list.append(self)
+            self.get_prev().get_solution(initial, cc_returning_list)
 
 
 class Player(object):
@@ -163,7 +163,7 @@ if __name__ == '__main__':
     checkpoints = []
     node_succesors = []
     succesors = []
-    aux_list = []
+    cc_returning_list = []
 
     for f in range(0,NUM_BLOCKS_H):
         for c in range(0,NUM_BLOCKS_W):
@@ -218,8 +218,7 @@ if __name__ == '__main__':
                         checkpoints.append(player.get_state())
                     print(f"checkpoint at {checkpoints[-1].get_position()}")
                 elif n == 0:
-                    current.go_back_to(checkpoints[-1], aux_list)
-                    aux_list.pop(0)
+                    current.go_back_to(checkpoints[-1], cc_returning_list)
                     returning = True
                     continue
 
@@ -228,8 +227,8 @@ if __name__ == '__main__':
                 maze.record.append(current.get_position())
 
             else:
-                if len(aux_list)>0:
-                    current = aux_list.pop(0)
+                if len(cc_returning_list)>0:
+                    current = cc_returning_list.pop(0)
                     player.move(current)
                 else:
                     checkpoints.pop()
@@ -240,18 +239,18 @@ if __name__ == '__main__':
 
             #Visual
             draw_single_block(last, BLUE)
-            for c in checkpoints: draw_single_block(c, (216, 26, 240))
+            if len(checkpoints)>0: draw_single_block(checkpoints[-1], PURPLE)
             player.draw(screen)
 
             last = current
 
         else:
             if not returning:
-                current.get_solution(initial, aux_list)
+                current.get_solution(initial, cc_returning_list)
                 returning = True
-            elif returning and len(aux_list)>0:
-                FPS = 30
-                draw_single_block(aux_list.pop(0), GREEN)
+            elif returning and len(cc_returning_list)>0:
+                FPS = 144/2
+                draw_single_block(cc_returning_list.pop(0), GREEN)
             else:
                 FPS = 1
                 print("Finish")
