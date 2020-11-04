@@ -11,7 +11,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 run = True
 WHITE = (255, 255, 255)
 clock = pygame.time.Clock()
-FPS = 60
+FPS = 1
 pygame.init()
 
 if __name__ == '__main__':
@@ -42,10 +42,10 @@ if __name__ == '__main__':
                     # print(pos_matrix)
         #Logic section
         if TURN%2 == 1:
-            if player1.turn(board, pos_matrix):
+            if player1.turn(board, pos_matrix, player2):
                 TURN += 1
         else:
-            if player2.turn(board, pos_matrix):
+            if player2.turn(board, pos_matrix, player1):
                 TURN += 1
 
         if board.game_over():

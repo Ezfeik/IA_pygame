@@ -9,29 +9,30 @@ class Board():
         self.grid_size = gs
 
 
-    def set_matrix(self, i, j, l):
+    def set_matrix(self, m):
+        self.matrix = m
+
+
+    def set_letter(self, i, j, l):
         self.matrix[i][j] = l
 
 
+    def get_matrix(self):
+        return self.matrix
+
+
     def game_over(self):
-        if self.matrix[0][0] == self.matrix[0][1] == self.matrix[0][2] != " ":
+        for i in range(3):
+            if self.matrix[i][0] == self.matrix[i][1] == self.matrix[i][2] != " ":
+                return True
+            if self.matrix[0][i] == self.matrix[1][i] == self.matrix[2][i] != " ":
+                return True
+        if self.matrix[0][0] == self.matrix[1][1] == self.matrix[2][2] != " ":
             return True
-        elif self.matrix[1][0] == self.matrix[1][1] == self.matrix[1][2] != " ":
+        if self.matrix[0][2] == self.matrix[1][1] == self.matrix[2][0] != " ":
             return True
-        elif self.matrix[2][0] == self.matrix[2][1] == self.matrix[2][2] != " ":
-            return True
-        elif self.matrix[0][0] == self.matrix[1][0] == self.matrix[2][0] != " ":
-            return True
-        elif self.matrix[0][1] == self.matrix[1][1] == self.matrix[2][1] != " ":
-            return True
-        elif self.matrix[0][2] == self.matrix[1][2] == self.matrix[2][2] != " ":
-            return True
-        elif self.matrix[0][0] == self.matrix[1][1] == self.matrix[2][2] != " ":
-            return True
-        elif self.matrix[0][2] == self.matrix[1][1] == self.matrix[2][0] != " ":
-            return True
-        else:
-            return False
+
+        return False
 
 
     def draw(self, screen):

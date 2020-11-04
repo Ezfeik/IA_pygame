@@ -1,6 +1,5 @@
 import pygame
-import random
-
+from search import Search
 
 class Player():
 
@@ -9,19 +8,20 @@ class Player():
         self.ia = ia
 
 
-    def turn(self, board, pos):
+    def get_letter(self):
+        return self.letter
+
+
+    def turn(self, board, pos, opponent):
         if self.ia:
-            pos_ia = random.randint(0,2), random.randint(0,2)
-            if board.matrix[pos_ia[0]][pos_ia[1]] == " ":
-                board.set_matrix(pos_ia[0], pos_ia[1], self.letter)
-                return True
-            else:
-                return False
+            search = Search(board.get_matrix(), opponent.get_letter())
+            board.set_letter(search.find(), self.letter)
+            return True
         else:
             if pos == None:
                 return False
             elif board.matrix[pos[0]][pos[1]] == " ":
-                board.set_matrix(pos[0], pos[1], self.letter)
+                board.set_letter(pos[0], pos[1], self.letter)
                 return True
             else:
                 return False
