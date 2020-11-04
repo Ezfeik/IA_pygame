@@ -7,7 +7,6 @@ class Board():
         self.matrix = [[" " for _ in range(3)] for _ in range(3)]
         self.color = (0,0,0)
         self.grid_size = gs
-        print(self.matrix)
 
 
     def set_matrix(self, i, j, l):
