@@ -39,17 +39,20 @@ if __name__ == '__main__':
                 if event.button == 1:
                     pos = pygame.mouse.get_pos()
                     pos_matrix = (int(pos[1]/GRID_SIZE), int(pos[0]/GRID_SIZE))
-                    print(pos_matrix)
+                    # print(pos_matrix)
         #Logic section
         if TURN%2 == 1:
             if player1.turn(board, pos_matrix):
                 TURN += 1
-        elif TURN%2 == 0:
+        else:
             if player2.turn(board, pos_matrix):
                 TURN += 1
 
         if board.game_over():
-            print("Alguien gano Bv")
+            if TURN%2 == 0:
+                print(f"{player1.letter} GANA!")
+            else:
+                print(f"{player2.letter} GANA!")
             run = False
         elif TURN > MAX_TURNS:
             print("EMPATAO")
