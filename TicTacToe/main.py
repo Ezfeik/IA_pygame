@@ -11,13 +11,22 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 run = True
 WHITE = (255, 255, 255)
 clock = pygame.time.Clock()
-FPS = 1
+FPS = 60
 pygame.init()
+
+
+def reset(b, p1, p2):
+
+    b.__init__(GRID_SIZE)
+    p1.__init__("X", False)
+    p2.__init__("O", True)
+
 
 if __name__ == '__main__':
 
     TURN = 1
     MAX_TURNS = 9
+    pause = False
 
     board = Board(GRID_SIZE)
     player1 = Player("X", False)
@@ -34,29 +43,37 @@ if __name__ == '__main__':
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     run = False
+                if event.key == pygame.K_SPACE:
+                    board.__init__(GRID_SIZE)
+                    player1.__init__("X", False)
+                    player2.__init__("O", True)
+                    TURN = 1
+                    pause = False
+                    continue
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     pos = pygame.mouse.get_pos()
                     pos_matrix = (int(pos[1]/GRID_SIZE), int(pos[0]/GRID_SIZE))
-                    # print(pos_matrix)
-        #Logic section
-        if TURN%2 == 1:
-            if player1.turn(board, pos_matrix, player2):
-                TURN += 1
-        else:
-            if player2.turn(board, pos_matrix, player1):
-                TURN += 1
 
-        if board.game_over():
-            if TURN%2 == 0:
-                print(f"{player1.letter} GANA!")
+        #Logic section
+        if not pause:
+            if TURN%2 == 1:
+                if player1.turn(board, pos_matrix, player2):
+                    TURN += 1
             else:
-                print(f"{player2.letter} GANA!")
-            run = False
-        elif TURN > MAX_TURNS:
-            print("EMPATAO")
-            run = False
+                if player2.turn(board, pos_matrix, player1):
+                    TURN += 1
+
+            if board.game_over():
+                if TURN%2 == 0:
+                    print(f"{player1.letter} GANA!")
+                else:
+                    print(f"{player2.letter} GANA!")
+                pause = True
+            elif TURN > MAX_TURNS:
+                print("EMPATAO")
+                pause = True
 
         #Draw section
         screen.fill(WHITE)
